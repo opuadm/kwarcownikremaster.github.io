@@ -1,32 +1,184 @@
+
+
+<!DOCTYPE html>
 <html>
 
 <head>
   <meta charset="UTF-8">
-  <title>kwarcownik clicker</title>
-  <link href='assets/style.css' rel='stylesheet' type='text/css'>
-  
+  <title>Kwarcownik Clicker</title>
+  <style>
+    .notification {
+      display: none;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: white;
+      color: red;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+    body {
+      color: white;
+      background-color: blue;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    #score {
+      font-size: 30px;
+      text-align: center;
+      margin: 10px;
+    }
+
+    #kwarcownik {
+      background-color: blue;
+      border-radius: 10px;
+      width: 10vw;
+      transition: 0.2s all;
+      border: 0px;
+    }
+
+    #kwarc {
+      transition: 4s all;
+      max-width: 10vw;
+    }
+
+    #sklep {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+    }
+
+    #sklepkwarc,
+    #sklepniew {
+      border: 1px solid black;
+      background-color: rgb(128, 128, 255);
+      border-radius: 10px;
+      display: flex;
+      padding: 10px;
+      margin: 10px;
+    }
+
+    #sklepkwarc:hover,
+    #sklepniew:hover {
+      background-color: white;
+      cursor: pointer;
+    }
+
+    #kwarcownik:hover {
+      background-color: red;
+      cursor: crosshair;
+    }
+
+    #kwarcownik:active {
+      box-shadow: 0px 0px 0px transparent;
+    }
+  </style>
 </head>
 
 <body>
-  <p style="font-family:monospace">wersja: beta 1.1<a href="logizmian.txt"> zobacz zmiany</a> || twórca: Sans Granie (discord: flop.geming)</p>
-    <main>
-    <div id="scordiv">
-        <h3 id="score">KWARC: 0</h3>
-        <p id="obecny">OBECNY KWARCOWNIK: BAZA1</p>
-    </div>
-    
-    <div id="gowno">
-        <button id="kwarcownik">
-            <img id="kwarc" src="assets/kwarcownik_artoks.png" alt="kwarcownik">
-        </button>
-    </div>
+  <p style="font-family: monospace">wersja: beta 1.1<a href="logizmian.txt"> zobacz zmiany</a> || twórca: Sans Granie (discord: flop.geming)</p>
+  <h3 id="score">KWARC: 0</h3>
+  <p id="obecny">OBECNY KWARCOWNIK: BAZA1</p>
+  <button id="kwarcownik">
+    <img id="kwarc" src="assets/1.png" alt="kwarcownik">
+  </button>
+  <div id="sklep">
+    <button id="sklepkwarc">KUP: baza2, 15</button>
+    <button id="sklepniew">KUP: niewolnik, 1000</button>
+  </div>
+  <p style="color: whitesmoke">kolory nawiazuja do rosji xd ok</p>
 
-    <div>
-        <button id="sklep">KUP: baza2, 10</button>
-    </div>
-    <p style="color:whitesmoke">kolory nawiazuja do rosji xd ok</p>
-    </main>
-  <script src="index.js"></script>
+  <div class="notification" id="notification">
+    <span class="close-button" id="closeButton">x</span>
+    <p id="notificationText"></p>
+  </div>
+
+  <script>
+    var button = document.getElementById("kwarcownik");
+    var count = 0;
+    var kasa = 1;
+    var obecny = 0;
+    var niewolnicy = false;
+    var niewolnik = document.getElementById("sklepniew");
+    var notification = document.getElementById("notification");
+    var notificationText = document.getElementById("notificationText");
+    var closeButton = document.getElementById("closeButton");
+
+    var niewolnikInterval;
+
+    button.onclick = function() {
+      count += kasa;
+      document.getElementById("score").innerHTML = "KWARC: " + count;
+    };
+
+    var sklep = document.getElementById("sklepkwarc");
+    sklep.onclick = function() {
+      var kwarcownicy = ["Baza1", "Baza2", "Szwecja", "Serbia", "Wagner", "Artoks", "Naczi", "Polska", "Artoks2", "Artoks3"];
+      var kwarcownicykasa = [15, 60, 150, 420, 850, 1337, 2500, 5000, 8950, 20000];
+
+      if (obecny < kwarcownicy.length - 1 && count >= kwarcownicykasa[obecny]) {
+        count -= kwarcownicykasa[obecny];
+        obecny += 1;
+        kasa *= 2;
+        document.getElementById("sklepkwarc").innerHTML = "KUP: " + kwarcownicy[obecny + 1] + ", " + kwarcownicykasa[obecny];
+        document.getElementById("obecny").innerHTML = "OBECNY KWARCOWNIK: " + kwarcownicy[obecny];
+        document.getElementById("score").innerHTML = "KWARC: " + count;
+        obecny += 1;
+        document.getElementById("kwarc").src = "assets/" + obecny + ".png";
+        if(obecny > 8) {
+          document.getElementById("kwarc").src = "assets/" + obecny + ".gif";
+        }
+        obecny -= 1;
+        notificationText.textContent = "Kupiłeś nowego Kwarcownika: " + kwarcownicy[obecny];
+        notification.style.display = "block";
+      } else {
+        alert("Nie masz wystarczająco kwarcu lub osiągnąłeś ostatniego kwarcownika.");
+      }
+    };
+
+    niewolnik.onclick = function() {
+      if (count >= 1000 && !niewolnicy) {
+        count -= 1000;
+        niewolnicy = true;
+        niewolnik.innerHTML = "WYKUPIONY";
+
+        niewolnikInterval = setInterval(function() {
+          count += kasa;
+          document.getElementById("score").innerHTML = "KWARC: " + count;
+        }, 1000);
+
+        notificationText.textContent = "Wykupiłeś niewolnika. Zaczyna generować Kasa co sekundę.";
+        notification.style.display = "block";
+      } else if (niewolnicy) {
+        alert("Niewolnik już został wykupiony.");
+      } else {
+        alert("Nie masz wystarczająco kwarcu.");
+      }
+    };
+
+    closeButton.addEventListener("click", function() {
+      notification.style.display = "none";
+    });
+  </script>
 </body>
 
 </html>
