@@ -11,3 +11,11 @@ rozbudowano mechanizm punktów za klikanie
 stworzono primytywny sklep
 dodano NOWYCH KWARCOWNIKOW
 kilka pomniejszych zmian wizualnych 
+WERSJA BETA 1.2
+ok zmieniono dużo w tym 
+wygląd (teraz ładniej)
+WIECEJ kwarcowników
+lepszy javascript
+powiadomienia
+NIEWOLNICY
+naprawiono błędy
