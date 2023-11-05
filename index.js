@@ -7,7 +7,7 @@ button.onclick = function() {
 };
 let kwarcownik = "artoks";
 const kwarcownicy = ["Baza1", "Baza2", "Wagner", "Artoks", "Naczi", "Artoks2", "Artoks3"];
-const kwarcownicykasa = [10, 69, 150, 420, 1000, 2137, 4000];
+const kwarcownicykasa = [10, 50, 120, 250, 520, 750, 835];
 let potrzebna = kwarcownicykasa[0];
 let obecny = 0;
 var sklep = document.getElementById("sklep");
